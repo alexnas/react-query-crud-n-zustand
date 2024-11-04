@@ -1,9 +1,8 @@
+import { Icon } from '@iconify/react';
+import ProjectCard from '@/components/projects/ProjectCard';
 import { useProjects } from '@/hooks/useProjects';
-import { useProjectStore } from '@/store/projectStore';
 
-const ProjectsListView = () => {
-  const formMode = useProjectStore((state) => state.formMode);
-  const handleFormMode = useProjectStore((state) => state.setFormMode);
+const HomeView: React.FC = () => {
   const { data: projects, isPending, error } = useProjects();
 
   if (isPending) {
@@ -11,50 +10,45 @@ const ProjectsListView = () => {
   } else if (error) {
     return (
       <div>
-        Oooops... There was an error: {error.name} / {error.message}
+        Ooops... There was an error: {error.name} / {error.message}
       </div>
     );
   }
 
+  const handleAddClick = () => {
+    console.log('handleAddClick');
+  };
+
   return (
     <>
-      <div className="h-screen bg-gray-200 p-3">
-        <h1 className="text-3xl font-bold text-blue-800">Projects</h1>
+      <div className="relative h-screen my-6 overflow-auto px-2 dark:text-gray-200 sm:px-6 lg:px-8">
+        <h1 className="fixed pl-2 text-3xl font-semibold text-gray-700 dark:text-gray-200">
+          Projects
+        </h1>
 
-        {projects && projects.length === 0 && <div>No project</div>}
+        <button
+          className="absolute right-4 top-2 lg:right-20"
+          onClick={handleAddClick}
+          type="button"
+        >
+          <Icon
+            className="text-4xl text-teal-200/70 hover:text-orange-400/70"
+            icon="material-symbols:add-box-outline-rounded"
+          />
+        </button>
 
-        <div>
-          {projects?.map((project) => {
-            return (
-              <div>
-                {project.id}: {project.title}
-              </div>
-            );
-          })}
-        </div>
+        {projects && projects.length == 0 && <div>No projects.</div>}
 
-        <div className="my-4">
-          Form Mode:
-          <span className="font-bold"> {formMode}</span>
-        </div>
-
-        <div className="flex gap-4">
-          <button
-            className=" bg-teal-600 p-3 text-white rounded-lg"
-            onClick={() => handleFormMode('EDIT')}
-          >
-            Set Edit
-          </button>
-          <button
-            className=" bg-teal-600 p-3 text-white rounded-lg"
-            onClick={() => handleFormMode('VIEW')}
-          >
-            Set VIEW
-          </button>
-        </div>
+        {projects && projects.length > 0 && (
+          <div className="mt-16 flex flex-wrap justify-center">
+            {projects?.map((project) => {
+              return <ProjectCard project={project} />;
+            })}
+          </div>
+        )}
       </div>
     </>
   );
 };
 
-export default ProjectsListView;
+export default HomeView;
