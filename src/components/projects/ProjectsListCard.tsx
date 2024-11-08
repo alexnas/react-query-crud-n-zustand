@@ -1,16 +1,31 @@
 import { Icon } from '@iconify/react';
 import { IProject } from '@/types';
+import useModal from '@/components/modal/useModal';
+import ModalWrapper from '@/components/modal/ModalWrapper';
+import { useProjectStore } from '@/store/projectStore';
+import ProjectModalForm from '@/components/projects/ProjectModalForm';
 
 interface IProps {
   project: IProject;
 }
 
-const ProjectCard: React.FC<IProps> = ({ project }) => {
+const ProjectsListCard: React.FC<IProps> = ({ project }) => {
+  const [isShowingModal, toggleModal] = useModal(false);
+  const formMode = useProjectStore((state) => state.formMode);
+  const setFormMode = useProjectStore((state) => state.setFormMode);
+
   const handleViewClick = (id: number) => {
+    setFormMode('VIEW');
     console.log('handleViewClick', id);
+
+    toggleModal();
   };
+
   const handleEditClick = (id: number) => {
+    setFormMode('EDIT');
     console.log('handleEditClick', id);
+
+    toggleModal();
   };
   return (
     <div className="mb-4 lg:mb-8 mx-auto w-full max-w-[450px] rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700 shadow drop-shadow-xl sm:p-6 md:p-8 dark:bg-gray-700 dark:text-gray-200">
@@ -56,8 +71,17 @@ const ProjectCard: React.FC<IProps> = ({ project }) => {
           />
         </button>
       </div>
+
+      <ModalWrapper show={isShowingModal} onCloseHandleClick={toggleModal}>
+        <ProjectModalForm
+          formMode={formMode}
+          handleToEdit={() => setFormMode('EDIT')}
+          project={project}
+          toggleModal={toggleModal}
+        />
+      </ModalWrapper>
     </div>
   );
 };
 
-export default ProjectCard;
+export default ProjectsListCard;

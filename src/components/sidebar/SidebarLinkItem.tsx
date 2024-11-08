@@ -1,8 +1,7 @@
 import { NavLink } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import clsx from 'clsx';
-import { Icon } from '@iconify/react/dist/iconify.js';
 import { ISideMenuItem } from '@/types';
-import { activeMenuItem, inactiveMenuItem } from '@/assets/styles/twClasses';
 
 interface IProps {
   item: ISideMenuItem;
@@ -14,8 +13,11 @@ const SidebarLInkItem: React.FC<IProps> = ({ item }) => {
       to={item.path}
       className={({ isActive }) =>
         clsx(
-          'ml-1 flex items-center whitespace-nowrap border-l-4 px-4 py-1',
-          isActive ? activeMenuItem : inactiveMenuItem
+          'ml-1 px-4 py-1 flex items-center whitespace-nowrap border-l-4 border-r-4 border-r-gray-600',
+          {
+            'active-menu-item': isActive,
+            'inactive-menu-item': !isActive,
+          }
         )
       }
     >
