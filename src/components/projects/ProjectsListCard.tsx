@@ -6,6 +6,7 @@ import { useProjectStore } from '@/store/projectStore';
 import ProjectModalForm from '@/components/projects/ProjectModalForm';
 
 interface IProps {
+  projectId?: number;
   project: IProject;
 }
 
@@ -76,6 +77,7 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
         <ProjectModalForm
           formMode={formMode}
           handleToEdit={() => setFormMode('EDIT')}
+          projectId={project.id}
           project={project}
           toggleModal={toggleModal}
         />

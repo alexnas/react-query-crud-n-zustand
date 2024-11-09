@@ -43,7 +43,13 @@ const ProjectsListView: React.FC = () => {
           {projects && projects.length > 0 && (
             <div className="mt-8 flex flex-wrap justify-center">
               {projects?.map((project) => {
-                return <ProjectsListCard project={project} key={project.id} />;
+                return (
+                  <ProjectsListCard
+                    projectId={project.id}
+                    project={project}
+                    key={project.id}
+                  />
+                );
               })}
             </div>
           )}

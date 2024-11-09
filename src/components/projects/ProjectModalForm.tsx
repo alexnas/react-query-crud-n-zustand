@@ -7,6 +7,7 @@ import type { IProject, IProjectFormMode } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import capitalize from '@/tools/capitalize';
 import { formatDateTime } from '@/tools/formatDate';
+import { useProjectById } from '@/components/projects/useProjects';
 
 const formModes = {
   ['NEW']: {
@@ -51,17 +52,26 @@ type IFormInput = z.infer<typeof FormSchema>;
 
 interface IProps {
   formMode: IProjectFormMode;
-  project: IProject;
+  projectId?: number;
+  project: IProject | null;
   handleToEdit: () => void;
   toggleModal: () => void;
 }
 
 const ProjectModalForm: React.FC<IProps> = ({
   formMode,
-  project,
+  projectId,
+  // project,
   handleToEdit,
   toggleModal,
 }) => {
+  const {
+    data: currentProject,
+    isPending,
+    isError,
+    error,
+  } = useProjectById(projectId);
+
   const {
     register,
     handleSubmit,
@@ -76,6 +86,16 @@ const ProjectModalForm: React.FC<IProps> = ({
   useEffect(() => {
     setIsReadOnly(formMode === 'VIEW' ? true : false);
   }, [formMode]);
+
+  if (isPending) {
+    return <div>Loading ...</div>;
+  } else if (isError) {
+    return (
+      <div>
+        Ooops... There was an error: {error.name} / {error.message}
+      </div>
+    );
+  }
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log('onSubmit EDIT ============', formMode, data);
@@ -92,9 +112,9 @@ const ProjectModalForm: React.FC<IProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {project?.id && (
+        {currentProject?.id && (
           <div className="flex justify-end mr-5 text-gray-500 font-semibold italic">
-            id: {project.id}
+            id: {currentProject.id}
           </div>
         )}
         <div className="m-3">
@@ -103,7 +123,7 @@ const ProjectModalForm: React.FC<IProps> = ({
               {...register('title', {
                 disabled: isReadOnly,
               })}
-              defaultValue={project.title}
+              defaultValue={currentProject?.title}
               type="text"
               name="title"
               id="title"
@@ -126,18 +146,7 @@ const ProjectModalForm: React.FC<IProps> = ({
               {...register('description', {
                 disabled: isReadOnly,
               })}
-              defaultValue={project.description}
-              type="description"
-              name="description"
-              id="description"
-              placeholder="description"
-              className="peer form-input"
-            />
-            <input
-              {...register('description', {
-                disabled: isReadOnly,
-              })}
-              defaultValue={project.description}
+              defaultValue={currentProject?.description}
               type="description"
               name="description"
               id="description"
@@ -180,7 +189,11 @@ const ProjectModalForm: React.FC<IProps> = ({
 
           <div className="relative mb-8">
             <input
-              value={formatDateTime(project.createdAt)}
+              value={
+                currentProject
+                  ? formatDateTime(currentProject?.createdAt)
+                  : undefined
+              }
               name="createdAt"
               id="createdAt"
               className="peer form-input"
@@ -197,7 +210,11 @@ const ProjectModalForm: React.FC<IProps> = ({
 
           <div className="relative mb-8">
             <input
-              value={formatDateTime(project.updatedAt)}
+              value={
+                currentProject
+                  ? formatDateTime(currentProject?.updatedAt)
+                  : undefined
+              }
               name="updatedAt"
               id="updatedAt"
               className="peer form-input"
@@ -223,7 +240,7 @@ const ProjectModalForm: React.FC<IProps> = ({
                   {...register('isActive', {
                     disabled: isReadOnly,
                   })}
-                  defaultChecked={project.isActive}
+                  defaultChecked={currentProject?.isActive}
                   id="isActive"
                   type="checkbox"
                   className={clsx('peer custom-checkbox', {
