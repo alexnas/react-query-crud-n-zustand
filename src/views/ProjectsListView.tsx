@@ -1,9 +1,16 @@
 import { Icon } from '@iconify/react';
 import ProjectsListCard from '@/components/projects/ProjectsListCard';
 import { useProjects } from '@/components/projects/useProjects';
+import { useProjectStore } from '@/store/projectStore';
+import useModal from '@/components/modal/useModal';
+import ModalWrapper from '@/components/modal/ModalWrapper';
+import ProjectModalForm from '@/components/projects/ProjectModalForm';
 
 const ProjectsListView: React.FC = () => {
+  const [isShowModal, toggleModal] = useModal(false);
+  const formMode = useProjectStore((state) => state.formMode);
   const { data: projects, isPending, error } = useProjects();
+  const setFormMode = useProjectStore((state) => state.setFormMode);
 
   if (isPending) {
     return <div>Loading ...</div>;
@@ -16,7 +23,8 @@ const ProjectsListView: React.FC = () => {
   }
 
   const handleAddClick = () => {
-    console.log('handleAddClick');
+    setFormMode('NEW');
+    toggleModal();
   };
 
   return (
@@ -43,17 +51,19 @@ const ProjectsListView: React.FC = () => {
           {projects && projects.length > 0 && (
             <div className="mt-8 flex flex-wrap justify-center">
               {projects?.map((project) => {
-                return (
-                  <ProjectsListCard
-                    projectId={project.id}
-                    project={project}
-                    key={project.id}
-                  />
-                );
+                return <ProjectsListCard project={project} key={project.id} />;
               })}
             </div>
           )}
         </div>
+        <ModalWrapper show={isShowModal} onCloseHandleClick={toggleModal}>
+          <ProjectModalForm
+            formMode={formMode}
+            projectId={-1}
+            handleToEdit={() => setFormMode('EDIT')}
+            toggleModal={toggleModal}
+          />
+        </ModalWrapper>
       </div>
     </>
   );

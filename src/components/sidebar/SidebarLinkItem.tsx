@@ -7,7 +7,7 @@ interface IProps {
   item: ISideMenuItem;
 }
 
-const SidebarLInkItem: React.FC<IProps> = ({ item }) => {
+const SidebarLinkItem: React.FC<IProps> = ({ item }) => {
   return (
     <NavLink
       to={item.path}
@@ -32,4 +32,4 @@ const SidebarLInkItem: React.FC<IProps> = ({ item }) => {
   );
 };
 
-export default SidebarLInkItem;
+export default SidebarLinkItem;

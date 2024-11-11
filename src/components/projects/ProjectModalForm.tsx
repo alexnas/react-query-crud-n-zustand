@@ -3,11 +3,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Icon } from '@iconify/react';
 import clsx from 'clsx';
 import * as z from 'zod';
-import type { IProject, IProjectFormMode } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { IProject, IProjectFormMode } from '@/types';
 import capitalize from '@/tools/capitalize';
 import { formatDateTime } from '@/tools/formatDate';
-import { useProjectById } from '@/components/projects/useProjects';
+import {
+  useAddNewProject,
+  useProjectById,
+} from '@/components/projects/useProjects';
 
 const formModes = {
   ['NEW']: {
@@ -53,7 +56,6 @@ type IFormInput = z.infer<typeof FormSchema>;
 interface IProps {
   formMode: IProjectFormMode;
   projectId?: number;
-  project: IProject | null;
   handleToEdit: () => void;
   toggleModal: () => void;
 }
@@ -61,7 +63,6 @@ interface IProps {
 const ProjectModalForm: React.FC<IProps> = ({
   formMode,
   projectId,
-  // project,
   handleToEdit,
   toggleModal,
 }) => {
@@ -87,6 +88,8 @@ const ProjectModalForm: React.FC<IProps> = ({
     setIsReadOnly(formMode === 'VIEW' ? true : false);
   }, [formMode]);
 
+  const { mutate: addProject } = useAddNewProject();
+
   if (isPending) {
     return <div>Loading ...</div>;
   } else if (isError) {
@@ -97,8 +100,19 @@ const ProjectModalForm: React.FC<IProps> = ({
     );
   }
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log('onSubmit EDIT ============', formMode, data);
+  const onSubmit: SubmitHandler<IFormInput> = (formData) => {
+    console.log('onSubmit NEW/EDIT ============', formMode, formData);
+    if (formMode === 'NEW') {
+      const newProject: IProject = {
+        ...formData,
+        id: -1,
+        createdAt: new Date().toString(),
+        updatedAt: new Date().toString(),
+      };
+      addProject(newProject);
+    } else if (formMode === 'EDIT') {
+      // TODO: to mutate EDIT PROJECT
+    }
     toggleModal();
   };
 
@@ -187,47 +201,51 @@ const ProjectModalForm: React.FC<IProps> = ({
             </label>
           </div>
 
-          <div className="relative mb-8">
-            <input
-              value={
-                currentProject
-                  ? formatDateTime(currentProject?.createdAt)
-                  : undefined
-              }
-              name="createdAt"
-              id="createdAt"
-              className="peer form-input"
-              placeholder="Date of creation"
-              disabled
-            />
-            <label
-              htmlFor="createdAt"
-              className="form-label peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
-            >
-              Created
-            </label>
-          </div>
+          {formMode !== 'NEW' && (
+            <div className="relative mb-8">
+              <input
+                value={
+                  currentProject
+                    ? formatDateTime(currentProject?.createdAt)
+                    : undefined
+                }
+                name="createdAt"
+                id="createdAt"
+                className="peer form-input"
+                placeholder="Date of creation"
+                disabled
+              />
+              <label
+                htmlFor="createdAt"
+                className="form-label peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
+              >
+                Created
+              </label>
+            </div>
+          )}
 
-          <div className="relative mb-8">
-            <input
-              value={
-                currentProject
-                  ? formatDateTime(currentProject?.updatedAt)
-                  : undefined
-              }
-              name="updatedAt"
-              id="updatedAt"
-              className="peer form-input"
-              placeholder="Date of update"
-              disabled
-            />
-            <label
-              htmlFor="updatedAt"
-              className="form-label peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
-            >
-              Updated
-            </label>
-          </div>
+          {formMode !== 'NEW' && (
+            <div className="relative mb-8">
+              <input
+                value={
+                  currentProject
+                    ? formatDateTime(currentProject?.updatedAt)
+                    : undefined
+                }
+                name="updatedAt"
+                id="updatedAt"
+                className="peer form-input"
+                placeholder="Date of update"
+                disabled
+              />
+              <label
+                htmlFor="updatedAt"
+                className="form-label peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600"
+              >
+                Updated
+              </label>
+            </div>
+          )}
 
           <div className="relative mb-8">
             <div className="peer form-input flex items-center">
@@ -275,11 +293,7 @@ const ProjectModalForm: React.FC<IProps> = ({
           <div className="w-full flex justify-between">
             <div className="flex gap-3">
               {formMode !== 'VIEW' && (
-                <button
-                  type="submit"
-                  className="form-btn btn-teal"
-                  onClick={handleToEdit}
-                >
+                <button type="submit" className="form-btn btn-teal">
                   {formModes[formMode].submitTitle}
                 </button>
               )}

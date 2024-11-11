@@ -2,14 +2,14 @@ import Modal from '@/components/modal/Modal';
 
 interface IProps {
   show: boolean;
-  children?: React.ReactNode;
   onCloseHandleClick: () => void;
+  children?: React.ReactNode;
 }
 
 const ModalWrapper: React.FC<IProps> = ({
   show,
-  children,
   onCloseHandleClick,
+  children,
 }) => {
   return (
     <Modal show={show} onCloseHandleClick={onCloseHandleClick}>

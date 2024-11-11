@@ -1,5 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchProjectByid, fetchProjects } from '@/api/projectsApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  addNewProject,
+  fetchProjectByid,
+  fetchProjects,
+} from '@/api/projectsApi';
 
 export const useProjects = () =>
   useQuery({
@@ -16,3 +20,14 @@ export const useProjectById = (projectId?: number) =>
     staleTime: 0.2 * 60 * 1000,
     gcTime: 0.5 * 60 * 1000,
   });
+
+export const useAddNewProject = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: addNewProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['productsList'] });
+    },
+  });
+};

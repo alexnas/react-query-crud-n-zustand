@@ -6,26 +6,22 @@ import { useProjectStore } from '@/store/projectStore';
 import ProjectModalForm from '@/components/projects/ProjectModalForm';
 
 interface IProps {
-  projectId?: number;
   project: IProject;
 }
 
 const ProjectsListCard: React.FC<IProps> = ({ project }) => {
-  const [isShowingModal, toggleModal] = useModal(false);
+  const [isShowModal, toggleModal] = useModal(false);
   const formMode = useProjectStore((state) => state.formMode);
   const setFormMode = useProjectStore((state) => state.setFormMode);
 
-  const handleViewClick = (id: number) => {
+  const handleViewClick = () => {
     setFormMode('VIEW');
-    console.log('handleViewClick', id);
-
     toggleModal();
   };
 
   const handleEditClick = (id: number) => {
     setFormMode('EDIT');
     console.log('handleEditClick', id);
-
     toggleModal();
   };
   return (
@@ -53,7 +49,7 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
       <div>
         <button
           className="absolute bottom-2 right-12"
-          onClick={() => handleViewClick(project.id)}
+          onClick={() => handleViewClick()}
           type="button"
         >
           <Icon
@@ -73,12 +69,11 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
         </button>
       </div>
 
-      <ModalWrapper show={isShowingModal} onCloseHandleClick={toggleModal}>
+      <ModalWrapper show={isShowModal} onCloseHandleClick={toggleModal}>
         <ProjectModalForm
           formMode={formMode}
-          handleToEdit={() => setFormMode('EDIT')}
           projectId={project.id}
-          project={project}
+          handleToEdit={() => setFormMode('EDIT')}
           toggleModal={toggleModal}
         />
       </ModalWrapper>
