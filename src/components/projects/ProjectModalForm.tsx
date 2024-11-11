@@ -10,6 +10,7 @@ import { formatDateTime } from '@/tools/formatDate';
 import {
   useAddNewProject,
   useProjectById,
+  useUpdateProject,
 } from '@/components/projects/useProjects';
 
 const formModes = {
@@ -89,6 +90,7 @@ const ProjectModalForm: React.FC<IProps> = ({
   }, [formMode]);
 
   const { mutate: addProject } = useAddNewProject();
+  const { mutate: updateProject } = useUpdateProject();
 
   if (isPending) {
     return <div>Loading ...</div>;
@@ -101,7 +103,6 @@ const ProjectModalForm: React.FC<IProps> = ({
   }
 
   const onSubmit: SubmitHandler<IFormInput> = (formData) => {
-    console.log('onSubmit NEW/EDIT ============', formMode, formData);
     if (formMode === 'NEW') {
       const newProject: IProject = {
         ...formData,
@@ -110,8 +111,14 @@ const ProjectModalForm: React.FC<IProps> = ({
         updatedAt: new Date().toString(),
       };
       addProject(newProject);
-    } else if (formMode === 'EDIT') {
-      // TODO: to mutate EDIT PROJECT
+    } else if (currentProject && formMode === 'EDIT') {
+      const projectToEdit = {
+        ...formData,
+        id: +currentProject.id,
+        createdAt: currentProject.createdAt.toString(),
+        updatedAt: new Date().toString(),
+      };
+      updateProject(projectToEdit);
     }
     toggleModal();
   };
@@ -161,7 +168,7 @@ const ProjectModalForm: React.FC<IProps> = ({
                 disabled: isReadOnly,
               })}
               defaultValue={currentProject?.description}
-              type="description"
+              type="text"
               name="description"
               id="description"
               placeholder="description"
@@ -183,6 +190,7 @@ const ProjectModalForm: React.FC<IProps> = ({
               {...register('description_markup', {
                 disabled: isReadOnly,
               })}
+              defaultValue={currentProject?.description_markup}
               name="description_markup"
               id="description_markup"
               className="peer form-input bg-gray-50"

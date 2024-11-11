@@ -3,6 +3,7 @@ import {
   addNewProject,
   fetchProjectByid,
   fetchProjects,
+  updateProjectById,
 } from '@/api/projectsApi';
 
 export const useProjects = () =>
@@ -26,6 +27,17 @@ export const useAddNewProject = () => {
 
   return useMutation({
     mutationFn: addNewProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['productsList'] });
+    },
+  });
+};
+
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateProjectById,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['productsList'] });
     },

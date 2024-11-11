@@ -19,9 +19,8 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
     toggleModal();
   };
 
-  const handleEditClick = (id: number) => {
+  const handleEditClick = () => {
     setFormMode('EDIT');
-    console.log('handleEditClick', id);
     toggleModal();
   };
   return (
@@ -49,7 +48,7 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
       <div>
         <button
           className="absolute bottom-2 right-12"
-          onClick={() => handleViewClick()}
+          onClick={handleViewClick}
           type="button"
         >
           <Icon
@@ -59,7 +58,7 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
         </button>
         <button
           className="absolute bottom-2 right-2"
-          onClick={() => handleEditClick(project.id)}
+          onClick={handleEditClick}
           type="button"
         >
           <Icon
