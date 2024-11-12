@@ -1,50 +1,55 @@
-# React + TypeScript + Vite
+# React Query CRUD (Zustand)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React Query CRUD app realizes full CRUD DB operations through REST API (namely fetchAll, fetchById, AddNew, UpdateById, DeleteById). All async fetch operations are made with help of React Query power possibilities, including fetched data caching. On the other hand, usage of Zustand allowed to drastically simplify synchronous state management.
+React Hook Form and Zod are used to manage data in the form. Form is shown in separate modal window.
 
-Currently, two official plugins are available:
+## Used technologies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18
+- ReactRouter
+- React Query
+- Zustand
+- React Hook Form
+- Zod
+- Typescript
+- Vite
+- Eslint
+- TailwindCss
 
-## Expanding the ESLint configuration
+## Installation and Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Clone down this repository. You will need `node` and `npm` installed globally on your machine.
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### To Start Server:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+npm run dev
 ```
+
+### Try it out in the browser
+
+```sh
+http://localhost:5173/
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Linting
+
+Lint files:
+
+```sh
+npm run lint
+```
+
+## License
+
+MIT license @ [alexnas](https://github.com/alexnas)
