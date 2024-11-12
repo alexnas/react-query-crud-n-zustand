@@ -5,14 +5,12 @@ import AppSidebar from '@/components/sidebar/AppSidebar';
 
 const DefaultLayout: React.FC = () => {
   return (
-    <div className="font-roboto flex h-screen flex-col bg-gray-200">
-      <div>
-        <Header />
-      </div>
+    <div className="font-roboto flex h-screen flex-col bg-gray-200 dark:bg-gray-500 dark:text-gray-200">
+      <Header />
 
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex overflow-hidden">
         <AppSidebar />
-        <div className="container">
+        <div className="flex-1">
           <Outlet />
         </div>
       </main>

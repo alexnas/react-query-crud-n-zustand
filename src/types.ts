@@ -15,12 +15,20 @@ interface IProject {
   id: number;
   title: string;
   description: string;
-  description_markup: 'PLAIN' | 'MARKDOWN' | 'ASCIIDOC';
+  description_markup: IDescriptionMarkup;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
+type IDescriptionMarkup = 'PLAIN' | 'MARKDOWN' | 'ASCIIDOC';
+
 type IProjectFormMode = 'NEW' | 'VIEW' | 'EDIT';
 
-export type { INavbarMenuItem, ISideMenuItem, IProject, IProjectFormMode };
+export type {
+  INavbarMenuItem,
+  ISideMenuItem,
+  IProject,
+  IProjectFormMode,
+  IDescriptionMarkup,
+};

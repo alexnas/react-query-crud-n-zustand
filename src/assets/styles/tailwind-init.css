@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+}
+
+@layer components {
+  .form-btn {
+    @apply focus:outline-none text-white focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
+  }
+  .btn-indigo {
+    @apply bg-indigo-500 hover:bg-indigo-700 text-white focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-600;
+  }
+  .btn-teal {
+    @apply bg-teal-500 hover:bg-teal-700 text-white focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-600;
+  }
+  .btn-rose {
+    @apply bg-rose-500 hover:bg-rose-700 text-white focus:ring-rose-300 dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-rose-600;
+  }
+  .btn-amber {
+    @apply bg-amber-500 hover:bg-amber-700 text-white focus:ring-amber-300 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-600;
+  }
+  .form-input {
+    @apply h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:border-teal-600 focus:outline-none;
+  }
+  .form-label {
+    @apply absolute -top-3.5 left-0 pl-2 text-sm text-gray-600 transition-all;
+  }
+  .form-error {
+    @apply flex justify-end text-sm text-orange-400;
+  }
+  .custom-checkbox {
+    @apply before:content-[''] relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-gray-300 transition-all before:absolute before:left-2/4 before:top-2/4 before:block before:h-12 before:w-12 before:-translate-x-2/4 before:-translate-y-2/4 before:rounded-full before:opacity-0 before:transition-opacity checked:border-teal-600 checked:bg-teal-600 checked:before:bg-gray-900 hover:before:opacity-10 dark:border;
+  }
+  .active-menu-item {
+    @apply border-orange-400 border-r-gray-600 text-orange-400 bg-gray-500;
+  }
+  .inactive-menu-item {
+    @apply border-l-gray-800 border-r-gray-600 text-gray-300 hover:text-gray-100;
+  }
+  .active-nav-menu-item {
+    @apply border-orange-400 text-orange-400 bg-gray-700 hover:bg-gray-700;
+  }
+  .inactive-nav-menu-item {
+    @apply border-gray-800 text-gray-400 hover:text-gray-100  hover:bg-gray-700;
+  }
+}
+
+@layer utilities {
+}

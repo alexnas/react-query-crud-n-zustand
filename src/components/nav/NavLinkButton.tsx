@@ -14,7 +14,10 @@ const NavLinkButton: React.FC<Props> = (props) => {
         className={({ isActive }) =>
           clsx(
             'rounded-md px-3 py-2 text-sm hover:bg-gray-700 hover:text-white',
-            isActive ? 'font-medium text-orange-400' : 'text-gray-300'
+            {
+              'font-medium text-orange-400': isActive,
+              'text-gray-300': !isActive,
+            }
           )
         }
       >
