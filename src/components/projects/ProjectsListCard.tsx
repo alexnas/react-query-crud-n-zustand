@@ -4,6 +4,7 @@ import useModal from '@/components/modal/useModal';
 import ModalWrapper from '@/components/modal/ModalWrapper';
 import { useProjectStore } from '@/store/projectStore';
 import ProjectModalForm from '@/components/projects/ProjectModalForm';
+import { useDeleteProjectById } from '@/components/projects/useProjects';
 
 interface IProps {
   project: IProject;
@@ -13,6 +14,7 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
   const [isShowModal, toggleModal] = useModal(false);
   const formMode = useProjectStore((state) => state.formMode);
   const setFormMode = useProjectStore((state) => state.setFormMode);
+  const { mutate: deleteProject } = useDeleteProjectById();
 
   const handleViewClick = () => {
     setFormMode('VIEW');
@@ -23,8 +25,17 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
     setFormMode('EDIT');
     toggleModal();
   };
+
+  const handleDeleteClick = () => {
+    const result = confirm(
+      `Are you sure to delete project "${project.title}"?`
+    );
+    if (result) {
+      deleteProject(project.id);
+    }
+  };
   return (
-    <div className="mb-4 lg:mb-8 mx-auto w-full max-w-[450px] rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700 shadow drop-shadow-xl sm:p-6 md:p-8 dark:bg-gray-700 dark:text-gray-200">
+    <div className="relative mb-4 lg:mb-8 mx-auto w-full max-w-[450px] rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700 shadow drop-shadow-xl sm:p-6 md:p-8 dark:bg-gray-700 dark:text-gray-200">
       <h3 className="text-center text-lg font-semibold text-gray-900 dark:text-gray-200">
         {project.title}
       </h3>
@@ -46,6 +57,17 @@ const ProjectsListCard: React.FC<IProps> = ({ project }) => {
       </div>
 
       <div>
+        <button
+          className="absolute top-2 right-2"
+          onClick={handleDeleteClick}
+          type="button"
+        >
+          <Icon
+            className="text-2xl text-orange-300/90 hover:text-red-500/90"
+            icon="hugeicons:delete-04"
+          />
+        </button>
+
         <button
           className="absolute bottom-2 right-12"
           onClick={handleViewClick}

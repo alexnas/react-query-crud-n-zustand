@@ -56,7 +56,7 @@ type IFormInput = z.infer<typeof FormSchema>;
 
 interface IProps {
   formMode: IProjectFormMode;
-  projectId?: number;
+  projectId: number;
   handleToEdit: () => void;
   toggleModal: () => void;
 }

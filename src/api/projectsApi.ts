@@ -17,11 +17,8 @@ export const fetchProjects = async (): Promise<IProject[] | undefined> => {
 };
 
 export const fetchProjectByid = async (
-  projectId?: number
+  projectId: number
 ): Promise<IProject | undefined> => {
-  if (!projectId || projectId == -1) {
-    return;
-  }
   try {
     const response = await fetch(
       `${BASE_URL}/${PROJECT_ENDPOINT}/${projectId}`
@@ -80,6 +77,37 @@ export const updateProjectById = async (
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ...project }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Network response failed with response status: ${response.status}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      throw new Error('Something went wrong!');
+      console.error('Something went wrong!');
+    }
+  }
+};
+
+export const deleteProjectById = async (
+  projectId: number
+): Promise<IProject | undefined> => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/${PROJECT_ENDPOINT}/${projectId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       }
     );
 
